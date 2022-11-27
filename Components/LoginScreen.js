@@ -27,8 +27,8 @@ const LoginScreen = ({ navigation }) => {
             alert('Please fill Password');
             return;
         }
-        AsyncStorage.setItem('user_id', responseJson.data.email);
-        navigation.replace('DrawerNavigationRoutes');
+        // AsyncStorage.setItem('user_id', responseJson.data.email);
+        navigation.navigate('MainScreen');
     };
 
     return (

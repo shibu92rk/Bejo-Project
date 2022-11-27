@@ -2,8 +2,9 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import LoginScreen from './LoginScreen';
-import RegisterScreen from './RegisterScreen';
+import LoginScreen from './Components/LoginScreen';
+import RegisterScreen from './Components/RegisterScreen';
+import MainScreen from './Components/Main';
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,11 @@ export default function App() {
               fontWeight: 'bold', //Set Header text style
             },
           }}
+        />
+        <Stack.Screen
+          name="MainScreen"
+          component={MainScreen}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
       <StatusBar style="auto" />
