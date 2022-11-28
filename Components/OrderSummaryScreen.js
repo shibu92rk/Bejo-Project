@@ -1,30 +1,40 @@
-import React, { useState, createRef } from 'react';
+import React from 'react';
 import {
     StyleSheet,
-    TextInput,
     View,
     Text,
     KeyboardAvoidingView,
-    Keyboard,
     TouchableOpacity,
     ScrollView,
     Alert,
 } from 'react-native';
+import CommonDataManager from '../DataManager/DataManager';
 
+const OrderSummaryScreen = ({ route, navigation }) => {
+    const params = route.params;
 
-const OrderSummaryScreen = ({ navigation, route }) => {
+    const handlePlaceOrder = async () => {
+        try {
+            let commonData = CommonDataManager.getInstance();
+            let result = await commonData.setUserOrdersToStorage(params);
+            if (result) {
+                Alert.alert(
+                    "Order Placed",
+                    "Your Order has been placed successfully.",
+                    [
+                        {
+                            text: "OK",
+                            onPress: () => { navigation.navigate('PlaceOrder') }
+                        },
+                    ]
+                );
+            } else {
+                alert('Something went wrong. Please try again.')
+            }
 
-    const handlePlaceOrder = () => {
-        Alert.alert(
-            "Order Placed Successfully",
-            "Your Order has been placed.",
-            [
-                {
-                    text: "OK",
-                    onPress: () => { navigation.navigate('PlaceOrder') }
-                },
-            ]
-        );
+        } catch (e) {
+            console.warn('exception: ' + e);
+        }
     }
 
     return (
@@ -38,27 +48,27 @@ const OrderSummaryScreen = ({ navigation, route }) => {
                 <KeyboardAvoidingView enabled>
                     <View style={styles.SectionStyle}>
                         <Text style={styles.labelStyle}>Receiver's Name</Text>
-                        <Text style={styles.labelStyle}>route.params?.rName</Text>
+                        <Text style={styles.labelStyle}>{params.rName}</Text>
                     </View>
                     <View style={styles.SectionStyle}>
                         <Text style={styles.labelStyle}>Receiver's Ph No</Text>
-                        <Text style={styles.labelStyle}>route.params?.rName</Text>
+                        <Text style={styles.labelStyle}>{params.phone}</Text>
                     </View>
                     <View style={styles.SectionStyle}>
                         <Text style={styles.labelStyle}>Pick Up</Text>
-                        <Text style={styles.labelStyle}>route.params?.pickUp</Text>
+                        <Text style={styles.labelStyle}>{params.pickUpAddress}</Text>
                     </View>
                     <View style={styles.SectionStyle}>
                         <Text style={styles.labelStyle}>Drop Off</Text>
-                        <Text style={styles.labelStyle}>route.params?.dropOff</Text>
+                        <Text style={styles.labelStyle}>{params.dropOffAddress}</Text>
                     </View>
                     <View style={styles.SectionStyle}>
                         <Text style={styles.labelStyle}>Package Type</Text>
-                        <Text style={styles.labelStyle}>route.params?.type</Text>
+                        <Text style={styles.labelStyle}>{params.type}</Text>
                     </View>
                     <View style={styles.SectionStyle}>
                         <Text style={styles.labelStyle}>Instructions</Text>
-                        <Text style={styles.labelStyle}>route.params?.instructions</Text>
+                        <Text style={styles.labelStyle}>{params.instructions}</Text>
                     </View>
                     <TouchableOpacity
                         style={styles.buttonStyle}

@@ -1,21 +1,44 @@
-import React, { useState, createRef } from 'react';
+import React, { useState, useEffect, createRef } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
     StyleSheet,
     TextInput,
     View,
     Text,
     ScrollView,
-    Image,
     Keyboard,
     TouchableOpacity,
     KeyboardAvoidingView,
 } from 'react-native';
+import CommonDataManager from '../DataManager/DataManager';
 
 const LoginScreen = ({ navigation }) => {
     const [userEmail, setUserEmail] = useState('');
     const [userPassword, setUserPassword] = useState('');
     const [errortext, setErrortext] = useState('');
     const passwordInputRef = createRef();
+
+    const verifyUserData = async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem(userEmail);
+            if ((jsonValue) != null) {
+                const json = JSON.parse(jsonValue);
+                if (json.password == userPassword) {
+                    let commonData = CommonDataManager.getInstance();
+                    commonData.setUser(json);
+                    navigation.navigate('MainScreen');
+                } else {
+                    alert('Password is incorrect!');
+                    return;
+                }
+            } else {
+                alert('No user is registered with this email. Please enter a valid email.');
+            }
+        } catch (e) {
+            alert('Something went wrong. Please try again later.');
+            return;
+        }
+    }
 
     const handleSubmitPress = () => {
         setErrortext('');
@@ -27,8 +50,7 @@ const LoginScreen = ({ navigation }) => {
             alert('Please fill Password');
             return;
         }
-        // AsyncStorage.setItem('user_id', responseJson.data.email);
-        navigation.navigate('MainScreen');
+        verifyUserData();
     };
 
     return (
@@ -45,11 +67,11 @@ const LoginScreen = ({ navigation }) => {
                         <View style={styles.SectionStyle}>
                             <TextInput
                                 style={styles.inputStyle}
-                                onChangeText={(UserEmail) =>
-                                    setUserEmail(UserEmail)
+                                onChangeText={(userEmail) =>
+                                    setUserEmail(userEmail)
                                 }
                                 placeholder="Enter Email" //dummy@abc.com
-                                placeholderTextColor="#8b9cb5"
+                                placeholderTextColor="gray"
                                 autoCapitalize="none"
                                 keyboardType="email-address"
                                 returnKeyType="next"
@@ -68,7 +90,7 @@ const LoginScreen = ({ navigation }) => {
                                     setUserPassword(UserPassword)
                                 }
                                 placeholder="Enter Password" //12345
-                                placeholderTextColor="#8b9cb5"
+                                placeholderTextColor="gray"
                                 keyboardType="default"
                                 ref={passwordInputRef}
                                 onSubmitEditing={Keyboard.dismiss}
@@ -119,17 +141,15 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     buttonStyle: {
-        backgroundColor: '#7DE24E',
+        backgroundColor: '#007aff',
         borderWidth: 0,
-        color: '#FFFFFF',
+        color: '#007aff',
         borderColor: '#7DE24E',
         height: 40,
         alignItems: 'center',
-        borderRadius: 30,
         marginLeft: 35,
         marginRight: 35,
         marginTop: 20,
-        marginBottom: 25,
     },
     buttonTextStyle: {
         color: '#FFFFFF',
@@ -141,8 +161,7 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         paddingRight: 15,
         borderWidth: 1,
-        borderRadius: 30,
-        borderColor: '#dadae8',
+        borderColor: 'gray',
     },
     registerTextStyle: {
         textAlign: 'center',

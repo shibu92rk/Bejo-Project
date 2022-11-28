@@ -1,4 +1,4 @@
-import React, { useState, createRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import RadioButtonRN from 'radio-buttons-react-native';
 import {
     StyleSheet,
@@ -12,18 +12,38 @@ import {
     ScrollView,
 } from 'react-native';
 
-
-const PacakgeDetailsScreen = ({ navigation }) => {
+const PacakgeDetailsScreen = ({ route, navigation }) => {
     const [rName, setRName] = useState(null);
     const [rPhNo, setRPhNo] = useState(null);
     const [instructions, setInstructions] = useState(null);
     const [size, setSize] = useState(null);
+
+    const params = route.params;
+
     const handleNextPress = () => {
-        navigation.navigate({
-            name: 'Payment',
-            params: { rName: rName, phone: rPhNo, instructions: instructions, type: size },
-            merge: true,
-        });
+        if (!rName) {
+            alert('Please fill Receiver Name');
+            return;
+        }
+        if (!rPhNo) {
+            alert('Please fill Phone Number');
+            return;
+        }
+        if (!size) {
+            alert('Please select package type');
+            return;
+        }
+        navigation.navigate(
+            'Payment',
+            {
+                rName: rName,
+                phone: rPhNo,
+                instructions: instructions,
+                type: size,
+                ...params
+            },
+
+        );
     }
     const data = [
         { label: 'Small (2lb)' },
@@ -59,6 +79,8 @@ const PacakgeDetailsScreen = ({ navigation }) => {
                             onChangeText={(phone) =>
                                 setRPhNo(phone)
                             }
+                            keyboardType={'number-pad'}
+                            returnKeyType={'done'}
                             underlineColorAndroid="#f000"
                             placeholderTextColor="#8b9cb5"
                             onSubmitEditing={Keyboard.dismiss}

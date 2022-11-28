@@ -9,20 +9,45 @@ import {
     ScrollView,
 } from 'react-native';
 
-
+var creditcardutils = require('creditcardutils');
 const PaymentScreen = ({ navigation, route }) => {
+    const [ccNumber, setCCNumber] = useState(null);
+    const [expiry, setExpiry] = useState(null);
+    const [cvv, setCVV] = useState(null);
+    const [zipcode, setZipcode] = useState(null);
+
     const params = route.params;
+
     const handleNext = () => {
-        navigation.navigate({
-            name: 'OrderSummary',
-            params: {
-                rName: params.rName,
-                phone: params.rPhNo,
-                instructions: params.instructions,
-                type: params.size
+        console.warn(params);
+        if (!ccNumber) {
+            alert('Please fill Credit Card Number');
+            return;
+        }
+        if (!expiry) {
+            alert('Please fill Expiry ');
+            return;
+        }
+        if (!cvv) {
+            alert('Please enter cvv');
+            return;
+        }
+        if (!zipcode) {
+            alert('Please enter zipcode');
+            return;
+        }
+        // if (!creditcardutils.validateCardNumber(ccNumber)) {
+        //     console.warn('cc number : ' + ccNumber);
+        //     alert('Not a valid  Credit card number');
+        //     return;
+        // }
+        navigation.navigate(
+            'OrderSummary',
+            {
+                ccNumber: ccNumber,
+                ...params
             },
-            merge: true,
-        });
+        );
     }
     return (
         <View style={{ flex: 1 }}>
@@ -36,39 +61,43 @@ const PaymentScreen = ({ navigation, route }) => {
                     <View style={styles.SectionStyle}>
                         <TextInput
                             style={styles.inputStyle}
-                            onChangeText={(UserName) => setUserName(UserName)}
+                            onChangeText={(ccNumber) =>
+                                setCCNumber(ccNumber)
+                            }
+                            maxLength={15}
                             keyboardType={'number-pad'}
+                            returnKeyType={'done'}
                             placeholder="Credit Card Number"
                             placeholderTextColor="#8b9cb5"
-                            returnKeyType="next"
                             blurOnSubmit={false}
                         />
                     </View>
                     <View style={styles.SectionStyle}>
                         <TextInput
                             style={styles.inputStyle}
-                            onChangeText={(UserName) => setUserName(UserName)}
+                            onChangeText={(expiry) => setExpiry(expiry)}
                             keyboardType={'number-pad'}
                             placeholder="Expiry"
                             placeholderTextColor="#8b9cb5"
-                            returnKeyType="next"
+                            returnKeyType="done"
                             blurOnSubmit={false}
                         />
                         <TextInput
                             style={styles.inputStyle}
-                            onChangeText={(UserName) => setUserName(UserName)}
+                            onChangeText={(cvv) => setCVV(cvv)}
                             keyboardType={'number-pad'}
+                            maxLength={3}
                             placeholder="Enter CVV"
                             placeholderTextColor="#8b9cb5"
-                            returnKeyType="next"
+                            returnKeyType="done"
                             blurOnSubmit={false}
                         />
                         <TextInput
                             style={styles.inputStyle}
-                            onChangeText={(UserName) => setUserName(UserName)}
+                            onChangeText={(zipcode) => setZipcode(zipcode)}
                             placeholder="Zipcode"
                             placeholderTextColor="#8b9cb5"
-                            returnKeyType="next"
+                            returnKeyType="done"
                             blurOnSubmit={false}
                         />
                     </View>

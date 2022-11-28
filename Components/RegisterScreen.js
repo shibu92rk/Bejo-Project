@@ -1,17 +1,18 @@
 import React, { useState, createRef } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
     StyleSheet,
     TextInput,
     View,
     Text,
-    Image,
+    Alert,
     KeyboardAvoidingView,
     Keyboard,
     TouchableOpacity,
     ScrollView,
 } from 'react-native';
 
-const RegisterScreen = (props) => {
+const RegisterScreen = ({ navigation }) => {
     const [userName, setUserName] = useState('');
     const [userEmail, setUserEmail] = useState('');
     const [userAge, setUserAge] = useState('');
@@ -24,10 +25,49 @@ const RegisterScreen = (props) => {
     const addressInputRef = createRef();
     const passwordInputRef = createRef();
 
+    const validateEmail = () => {
+        const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        console.warn(userEmail);
+        if (reg.test(userEmail) === true) {
+            return true;
+        } else {
+            alert("Please enter a valid email address!");
+            return false;
+        }
+    }
+
+
+
+    const storeUserData = async (user) => {
+        try {
+            const jsonValue = JSON.stringify(user)
+            await AsyncStorage.setItem(user.email, jsonValue)
+            Alert.alert(
+                "User Registered.",
+                "User registered successfully.",
+                [
+                    {
+                        text: "OK",
+                        onPress: () => {
+
+                            navigation.navigate('Login');
+                        }
+                    },
+                ]
+            );
+        } catch (e) {
+            console.warn('exception: ' + e);
+        }
+    }
+
     const handleSubmitButton = () => {
         setErrortext('');
         if (!userName) {
             alert('Please fill Name');
+            return;
+        }
+        if (!userPassword) {
+            alert('Please fill Password');
             return;
         }
         if (!userEmail) {
@@ -42,10 +82,18 @@ const RegisterScreen = (props) => {
             alert('Please fill Address');
             return;
         }
-        if (!userPassword) {
-            alert('Please fill Password');
+        if (!validateEmail()) {
             return;
         }
+        const user = {
+            userId: userName + Math.random(),
+            email: userEmail,
+            password: userPassword,
+            userName: userName,
+            userAddress: userAddress,
+            userAge: userAge
+        };
+        storeUserData(user);
     }
 
     return (
@@ -62,9 +110,9 @@ const RegisterScreen = (props) => {
                             style={styles.inputStyle}
                             onChangeText={(UserName) => setUserName(UserName)}
                             placeholder="Enter Name"
-                            placeholderTextColor="#8b9cb5"
-                            autoCapitalize="sentences"
+                            placeholderTextColor="gray"
                             returnKeyType="next"
+                            autoCapitalize={false}
                             onSubmitEditing={() =>
                                 emailInputRef.current && emailInputRef.current.focus()
                             }
@@ -76,10 +124,11 @@ const RegisterScreen = (props) => {
                             style={styles.inputStyle}
                             onChangeText={(UserEmail) => setUserEmail(UserEmail)}
                             placeholder="Enter Email"
-                            placeholderTextColor="#8b9cb5"
+                            placeholderTextColor="gray"
                             keyboardType="email-address"
                             ref={emailInputRef}
                             returnKeyType="next"
+                            autoCapitalize={false}
                             onSubmitEditing={() =>
                                 passwordInputRef.current &&
                                 passwordInputRef.current.focus()
@@ -94,8 +143,9 @@ const RegisterScreen = (props) => {
                                 setUserPassword(UserPassword)
                             }
                             placeholder="Enter Password"
-                            placeholderTextColor="#8b9cb5"
+                            placeholderTextColor="gray"
                             ref={passwordInputRef}
+                            autoCapitalize={false}
                             returnKeyType="next"
                             secureTextEntry={true}
                             onSubmitEditing={() =>
@@ -110,7 +160,7 @@ const RegisterScreen = (props) => {
                             style={styles.inputStyle}
                             onChangeText={(UserAge) => setUserAge(UserAge)}
                             placeholder="Enter Age"
-                            placeholderTextColor="#8b9cb5"
+                            placeholderTextColor="gray"
                             keyboardType="numeric"
                             ref={ageInputRef}
                             returnKeyType="next"
@@ -129,8 +179,7 @@ const RegisterScreen = (props) => {
                             }
                             underlineColorAndroid="#f000"
                             placeholder="Enter Address"
-                            placeholderTextColor="#8b9cb5"
-                            autoCapitalize="sentences"
+                            placeholderTextColor="gray"
                             ref={addressInputRef}
                             returnKeyType="next"
                             onSubmitEditing={Keyboard.dismiss}
@@ -165,13 +214,12 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     buttonStyle: {
-        backgroundColor: '#7DE24E',
+        backgroundColor: '#007aff',
         borderWidth: 0,
-        color: '#FFFFFF',
+        color: '#007aff',
         borderColor: '#7DE24E',
         height: 40,
         alignItems: 'center',
-        borderRadius: 30,
         marginLeft: 35,
         marginRight: 35,
         marginTop: 20,
@@ -184,11 +232,9 @@ const styles = StyleSheet.create({
     },
     inputStyle: {
         flex: 1,
-        color: 'white',
         paddingLeft: 15,
         paddingRight: 15,
         borderWidth: 1,
-        borderRadius: 30,
         borderColor: '#dadae8',
     },
     errorTextStyle: {
@@ -197,7 +243,6 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     successTextStyle: {
-        color: 'white',
         textAlign: 'center',
         fontSize: 18,
         padding: 30,

@@ -18,7 +18,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.Shibu.Bejo",
+      "config": {
+        "googleMapsApiKey": "AIzaSyCL38-s6veWRWi966YAQsTBJ-M-5DTFxgA"
+      }
     },
     "android": {
       "adaptiveIcon": {

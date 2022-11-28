@@ -1,7 +1,9 @@
 import React, { useState, useEffect, createRef } from 'react';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
-import PacakgeDetailsScreen from './PacakgeDetailsScreen';
+import Geocoder from 'react-native-geocoding';
+import MapViewDirections from 'react-native-maps-directions';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import {
     Keyboard,
     StyleSheet,
@@ -11,11 +13,15 @@ import {
     TouchableOpacity,
 } from 'react-native';
 
+const googleAPIkey = 'AIzaSyCL38-s6veWRWi966YAQsTBJ-M-5DTFxgA';
+Geocoder.init(googleAPIkey);
 const PlaceOrderScreen = ({ navigation }) => {
     const [startOrder, setStartOrder] = useState(false);
     const [location, setLocation] = useState(null);
     const [pickUpAddress, setPickUpAddress] = useState('');
+    const [pickUpCoords, setPickUpCoords] = useState(null);
     const [dropOffAddress, setDropOffAddress] = useState('');
+    const [dropOffCoords, setDropOffCoords] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
 
     useEffect(() => {
@@ -26,7 +32,6 @@ const PlaceOrderScreen = ({ navigation }) => {
                 return;
             }
             let location = await Location.getCurrentPositionAsync({});
-            console.warn('Location received: ' + location.coords.latitude + ' ' + location.coords.longitude);
             setLocation({
                 latitude: location.coords.latitude,
                 longitude: location.coords.longitude,
@@ -40,12 +45,50 @@ const PlaceOrderScreen = ({ navigation }) => {
         setStartOrder(true);
     };
 
-    const handleNext = () => {
-        navigation.navigate('PackageDetails');
-        // if (pickUpAddress != null && dropOffAddress != null) {
-        //     navigation.navigate('PacakgeDetailsScreen');
-        // }
+    const handleSubmitPickUPAddress = () => {
+        Geocoder.from(pickUpAddress)
+            .then(json => {
+                var location = json.results[0].geometry.location;
+                setPickUpCoords({
+                    latitude: location.lat,
+                    longitude: location.lng,
+                });
+            })
+            .catch(error => {
+                console.warn(error);
+                setPickUpCoords(null);
+            }
+            );
     };
+
+    const handleSubmitDropOffAddress = () => {
+        Geocoder.from(dropOffAddress)
+            .then(json => {
+                var location = json.results[0].geometry.location;
+                setDropOffCoords({
+                    latitude: location.lat,
+                    longitude: location.lng,
+                });
+            })
+            .catch(error => {
+                console.warn(error);
+                setDropOffCoords(null);
+            }
+            );
+    };
+
+    const handleNext = () => {
+        // navigation.navigate('PackageDetails');
+        if (pickUpAddress != '' && dropOffAddress != '') {
+            navigation.navigate('PackageDetails', {
+                pickUpAddress: pickUpAddress,
+                dropOffAddress: dropOffAddress
+            })
+        } else {
+            alert('Enter pickup and drop off location.');
+        }
+    };
+
 
     return (
         <View style={styles.mainBody}>
@@ -67,7 +110,10 @@ const PlaceOrderScreen = ({ navigation }) => {
                             placeholder="Enter Pickup Address"
                             placeholderTextColor="#8b9cb5"
                             returnKeyType="next"
-                            onSubmitEditing={Keyboard.dismiss}
+                            onSubmitEditing={() => {
+                                Keyboard.dismiss();
+                                handleSubmitPickUPAddress();
+                            }}
                             blurOnSubmit={false}
                         />
                     </View>
@@ -80,7 +126,10 @@ const PlaceOrderScreen = ({ navigation }) => {
                             underlineColorAndroid="#f000"
                             placeholder="Enter Drop Off Address"
                             placeholderTextColor="#8b9cb5"
-                            onSubmitEditing={Keyboard.dismiss}
+                            onSubmitEditing={() => {
+                                Keyboard.dismiss();
+                                handleSubmitDropOffAddress();
+                            }}
                             blurOnSubmit={false}
                         />
                     </View>
@@ -88,8 +137,15 @@ const PlaceOrderScreen = ({ navigation }) => {
                         provider={PROVIDER_GOOGLE}
                         showsUserLocation={true}
                         initialRegion={location}>
-                        <Marker coordinate={location}
-                            pinColor="green" />
+                        <Marker coordinate={pickUpCoords} />
+                        <Marker coordinate={dropOffCoords} />
+                        <MapViewDirections
+                            origin={pickUpCoords}
+                            destination={dropOffCoords}
+                            apikey={googleAPIkey} // insert your API Key here
+                            strokeWidth={4}
+                            strokeColor="#111111"
+                        />
                     </MapView>
                     <TouchableOpacity
                         style={styles.buttonStyle}
@@ -137,7 +193,6 @@ const styles = StyleSheet.create({
     },
     inputStyle: {
         flex: 1,
-        color: 'white',
         paddingLeft: 15,
         paddingRight: 15,
         borderWidth: 1,
