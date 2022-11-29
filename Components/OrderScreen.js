@@ -18,7 +18,7 @@ const OrderScreen = ({ navigation }) => {
             const existingOrders = await AsyncStorage.getItem(key);
             let orders = JSON.parse(existingOrders);
             setOrders(orders);
-            console.warn('Orders: ', orders)
+            // console.warn('Orders: ', orders)
         }
         const unsubscribe = navigation.addListener('focus', () => {
             fetchData().catch(console.error);
