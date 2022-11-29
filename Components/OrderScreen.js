@@ -18,7 +18,7 @@ const OrderScreen = ({ navigation }) => {
             const existingOrders = await AsyncStorage.getItem(key);
             let orders = JSON.parse(existingOrders);
             setOrders(orders);
-            console.warn('Orders: ' + orders)
+            console.warn('Orders: ', orders)
         }
         const unsubscribe = navigation.addListener('focus', () => {
             fetchData().catch(console.error);
@@ -26,32 +26,29 @@ const OrderScreen = ({ navigation }) => {
         return unsubscribe;
     }, [navigation]);
 
-    const renderItem = (order) => (
-        <View style={styles.item}>
-            <View style={styles.SectionStyle}>
-                <Text style={styles.labelStyle}>Receiver Name</Text>
-                <Text style={styles.labelStyle}>{order.type}</Text>
-            </View>
-            <View style={styles.SectionStyle}>
-                <Text style={styles.labelStyle}>Package Type</Text>
-                <Text style={styles.labelStyle}>{order.type}</Text>
-            </View>
-            <View style={styles.SectionStyle}>
-                <Text style={styles.labelStyle}>Pick Up Address</Text>
-                <Text style={styles.labelStyle}>{order.pickUpAddress}</Text>
-            </View>
-            <View style={styles.SectionStyle}>
-                <Text style={styles.labelStyle}>Drop Off Address</Text>
-                <Text style={styles.labelStyle}>{order.dropOffAddress}</Text>
-            </View>
-        </View>
-    );
-
     return (
         <View style={styles.mainBody}>
             <FlatList
                 data={orders}
-                renderItem={renderItem}
+                renderItem={({item}) => 
+                <View style={styles.item}>
+                    <View style={styles.SectionStyle}>
+                        <Text style={styles.labelStyle}>Receiver Name</Text>
+                        <Text style={styles.labelStyle}>{item.rName}</Text>
+                    </View>
+                    <View style={styles.SectionStyle}>
+                        <Text style={styles.labelStyle}>Package Type</Text>
+                        <Text style={styles.labelStyle}>{item.type}</Text>
+                    </View>
+                    <View style={styles.SectionStyle}>
+                        <Text style={styles.labelStyle}>Pick Up Address</Text>
+                        <Text style={styles.labelStyle}>{item.pickUpAddress}</Text>
+                    </View>
+                    <View style={styles.SectionStyle}>
+                        <Text style={styles.labelStyle}>Drop Off Address</Text>
+                        <Text style={styles.labelStyle}>{item.dropOffAddress}</Text>
+                    </View>
+                </View>}
                 keyExtractor={item => item.ccNumber}
             />
         </View>
