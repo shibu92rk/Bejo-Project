@@ -9,16 +9,6 @@ const Tab = createBottomTabNavigator();
 const MainScreen = ({ navigation }) => {
     return (
         <Tab.Navigator initialRouteName='Home'
-            tabBarOptions={{
-                activeTintColor: '#fff',
-                inactiveTintColor: 'lightgray',
-                activeBackgroundColor: '#3f3f3f',
-                inactiveBackgroundColor: '#2f2f2f',
-                style: {
-                    backgroundColor: '#007aff',
-                    paddingBottom: 3
-                }
-            }}
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
@@ -33,6 +23,8 @@ const MainScreen = ({ navigation }) => {
                 },
                 tabBarActiveTintColor: '#007aff',
                 tabBarInactiveTintColor: 'gray',
+                tabBarActiveBackgroundColor: '#3f3f3f',
+                tabBarInactiveBackgroundColor: '#2f2f2f',
             })}>
             <Tab.Screen name="Profile" component={ProfileScreen} />
             <Tab.Screen name="Home" component={HomeScreen} />
