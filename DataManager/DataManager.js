@@ -2,8 +2,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class CommonDataManager {
 
-    static this = null;
-
     _userID = "";
     _user = null;
     _userOrders = [];
@@ -23,7 +21,6 @@ export default class CommonDataManager {
     }
 
     getUser() {
-        console.warn(CommonDataManager.getInstance._user);
         return CommonDataManager.getInstance._user;
     }
 
@@ -34,16 +31,9 @@ export default class CommonDataManager {
     async getOrdersFromStorage() {
         try {
             const key = 'orders' + this.getUserID();
-            const existingProducts = await AsyncStorage.getItem(key);
-            let newProduct = JSON.parse(existingProducts);
-            console.warn('newProduct: ' + newProduct);
-            for (const order in newProduct) {
-                console.warn(order.rName);
-            }
-            if (!newProduct) {
-                newProduct = []
-            }
-            return newProduct;
+            const existingOrders = await AsyncStorage.getItem(key);
+            let orders = JSON.parse(existingOrders);
+            return orders;
         } catch (e) {
             console.warn(e);
             return null;

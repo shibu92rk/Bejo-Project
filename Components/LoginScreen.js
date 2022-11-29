@@ -1,8 +1,9 @@
-import React, { useState, useEffect, createRef } from 'react';
+import React, { useState, createRef } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
     StyleSheet,
     TextInput,
+    Image,
     View,
     Text,
     ScrollView,
@@ -13,19 +14,23 @@ import {
 import CommonDataManager from '../DataManager/DataManager';
 
 const LoginScreen = ({ navigation }) => {
+    let commonData = CommonDataManager.getInstance();
     const [userEmail, setUserEmail] = useState('');
     const [userPassword, setUserPassword] = useState('');
     const [errortext, setErrortext] = useState('');
+    const emailInputRef = createRef();
     const passwordInputRef = createRef();
 
     const verifyUserData = async () => {
         try {
             const jsonValue = await AsyncStorage.getItem(userEmail);
+            console.warn(JSON.stringify(jsonValue));
             if ((jsonValue) != null) {
                 const json = JSON.parse(jsonValue);
                 if (json.password == userPassword) {
-                    let commonData = CommonDataManager.getInstance();
                     commonData.setUser(json);
+                    emailInputRef.current.clear();
+                    passwordInputRef.current.clear();
                     navigation.navigate('MainScreen');
                 } else {
                     alert('Password is incorrect!');
@@ -35,6 +40,7 @@ const LoginScreen = ({ navigation }) => {
                 alert('No user is registered with this email. Please enter a valid email.');
             }
         } catch (e) {
+            console.warn(e);
             alert('Something went wrong. Please try again later.');
             return;
         }
@@ -64,9 +70,12 @@ const LoginScreen = ({ navigation }) => {
                 }}>
                 <View>
                     <KeyboardAvoidingView enabled>
+                        <Image source={require('../assets/Bejo_logo.png')}
+                            style={styles.imageContainer} />
                         <View style={styles.SectionStyle}>
                             <TextInput
                                 style={styles.inputStyle}
+                                ref={emailInputRef}
                                 onChangeText={(userEmail) =>
                                     setUserEmail(userEmail)
                                 }
@@ -130,7 +139,13 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch',
         justifyContent: 'center',
         alignContent: 'center',
+        backgroundColor: 'black'
 
+    },
+    imageContainer: {
+        height: 200,
+        width: 200,
+        alignSelf: 'center'
     },
     SectionStyle: {
         flexDirection: 'row',
@@ -162,9 +177,11 @@ const styles = StyleSheet.create({
         paddingRight: 15,
         borderWidth: 1,
         borderColor: 'gray',
+        color: 'white',
     },
     registerTextStyle: {
         textAlign: 'center',
+        color: 'white',
         fontWeight: 'bold',
         fontSize: 14,
         alignSelf: 'center',

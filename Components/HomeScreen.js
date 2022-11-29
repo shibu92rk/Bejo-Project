@@ -19,7 +19,7 @@ const HomeScreen = ({ navigation }) => {
                 headerShown: true,
                 title: 'Pacakge Details', //Set Header Title
                 headerStyle: {
-                    backgroundColor: '#307ecc', //Set Header color
+                    backgroundColor: 'black', //Set Header color
                 },
                 headerTintColor: '#fff', //Set Header text color
                 headerTitleStyle: {
@@ -33,7 +33,7 @@ const HomeScreen = ({ navigation }) => {
                 headerShown: true,
                 title: 'Payment Details', //Set Header Title
                 headerStyle: {
-                    backgroundColor: '#307ecc', //Set Header color
+                    backgroundColor: 'black', //Set Header color
                 },
                 headerTintColor: '#fff', //Set Header text color
                 headerTitleStyle: {
@@ -47,7 +47,7 @@ const HomeScreen = ({ navigation }) => {
                 headerShown: true,
                 title: 'Order Summary', //Set Header Title
                 headerStyle: {
-                    backgroundColor: '#307ecc', //Set Header color
+                    backgroundColor: 'black', //Set Header color
                 },
                 headerTintColor: '#fff', //Set Header text color
                 headerTitleStyle: {

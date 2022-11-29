@@ -97,7 +97,7 @@ const RegisterScreen = ({ navigation }) => {
     }
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.mainContainer}>
             <ScrollView
                 keyboardShouldPersistTaps="handled"
                 contentContainerStyle={{
@@ -205,6 +205,10 @@ const RegisterScreen = ({ navigation }) => {
 export default RegisterScreen;
 
 const styles = StyleSheet.create({
+    mainContainer: {
+        flex: 1,
+        backgroundColor: 'black',
+    },
     SectionStyle: {
         flexDirection: 'row',
         height: 40,
@@ -235,6 +239,7 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         paddingRight: 15,
         borderWidth: 1,
+        color: 'white',
         borderColor: '#dadae8',
     },
     errorTextStyle: {

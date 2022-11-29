@@ -1,30 +1,50 @@
-import React, { useState, createRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     StyleSheet,
     View,
     Text,
     FlatList,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import CommonDataManager from '../DataManager/DataManager';
 
-const Item = ({ title }) => (
-    <View style={styles.item}>
-        <Text style={styles.title}>{title}</Text>
-    </View>
-);
-
 const OrderScreen = ({ navigation }) => {
-    var orders = null;
+    const [orders, setOrders] = useState(null);
 
     useEffect(() => {
-        orders = CommonDataManager.getInstance().getOrdersFromStorage();
-        for (const order in orders) {
-            console.warn('order: ' + orders.rName);
+        const fetchData = async () => {
+            const userId = CommonDataManager.getInstance().getUserID();
+            const key = 'orders' + userId;
+            const existingOrders = await AsyncStorage.getItem(key);
+            let orders = JSON.parse(existingOrders);
+            setOrders(orders);
+            console.warn('Orders: ' + orders)
         }
-    });
+        const unsubscribe = navigation.addListener('focus', () => {
+            fetchData().catch(console.error);
+        });
+        return unsubscribe;
+    }, [navigation]);
 
-    const renderItem = ({ item }) => (
-        < Item title={item.title} />
+    const renderItem = (order) => (
+        <View style={styles.item}>
+            <View style={styles.SectionStyle}>
+                <Text style={styles.labelStyle}>Receiver Name</Text>
+                <Text style={styles.labelStyle}>{order.type}</Text>
+            </View>
+            <View style={styles.SectionStyle}>
+                <Text style={styles.labelStyle}>Package Type</Text>
+                <Text style={styles.labelStyle}>{order.type}</Text>
+            </View>
+            <View style={styles.SectionStyle}>
+                <Text style={styles.labelStyle}>Pick Up Address</Text>
+                <Text style={styles.labelStyle}>{order.pickUpAddress}</Text>
+            </View>
+            <View style={styles.SectionStyle}>
+                <Text style={styles.labelStyle}>Drop Off Address</Text>
+                <Text style={styles.labelStyle}>{order.dropOffAddress}</Text>
+            </View>
+        </View>
     );
 
     return (
@@ -32,12 +52,12 @@ const OrderScreen = ({ navigation }) => {
             <FlatList
                 data={orders}
                 renderItem={renderItem}
-                keyExtractor={item => item.rName}
+                keyExtractor={item => item.ccNumber}
             />
         </View>
     );
 }
-
+//// <Text style={styles.labelStyle}>{order.rName}</Text>
 export default OrderScreen;
 
 const styles = StyleSheet.create({
@@ -46,24 +66,36 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch',
         justifyContent: 'center',
         alignContent: 'center',
-
+        backgroundColor: 'black',
     },
     labelStyle: {
         flex: 1,
-        color: 'black',
+        color: 'white',
         textAlignVertical: 'center',
         marginRight: 10,
         paddingTop: 10,
     },
     item: {
-        backgroundColor: '#f9c2ff',
-        padding: 20,
-        height: 30,
+        padding: 10,
+        flex: 1,
         marginVertical: 8,
-        marginHorizontal: 16,
+        marginHorizontal: 10,
+        borderRadius: 1,
+        borderColor: 'white',
+    },
+    SectionStyle: {
+        flexDirection: 'row',
+        height: 40,
+        marginTop: 20,
     },
     title: {
-        fontSize: 32,
+        flex: 1,
+        color: 'white',
+        height: 40,
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: 16,
     },
 });
 

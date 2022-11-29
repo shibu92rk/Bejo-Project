@@ -52,7 +52,7 @@ const PacakgeDetailsScreen = ({ route, navigation }) => {
     ];
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.mainContainer}>
             <ScrollView
                 keyboardShouldPersistTaps="handled"
                 contentContainerStyle={{
@@ -91,7 +91,9 @@ const PacakgeDetailsScreen = ({ route, navigation }) => {
                         <Text style={styles.labelStyle}>Pacakge Type</Text>
                         <RadioButtonRN
                             data={data}
-                            selectedBtn={(e) => setSize(e.label)}
+                            boxActiveBgColor="white"
+                            selectedBtn={(e) => setSize(e.label)
+                            }
                         />
                     </View>
                     <View style={styles.SectionColumnStyle}>
@@ -102,8 +104,7 @@ const PacakgeDetailsScreen = ({ route, navigation }) => {
                                 setInstructions(instructions)
                             }
                             multiline={true}
-                            underlineColorAndroid="#f000"
-                            placeholderTextColor="#8b9cb5"
+                            underlineColorAndroid="#fff"
                             onSubmitEditing={Keyboard.dismiss}
                             blurOnSubmit={false}
                         />
@@ -122,6 +123,10 @@ const PacakgeDetailsScreen = ({ route, navigation }) => {
 export default PacakgeDetailsScreen;
 
 const styles = StyleSheet.create({
+    mainContainer: {
+        flex: 1,
+        backgroundColor: 'black',
+    },
     SectionRowStyle: {
         flexDirection: 'row',
         height: 40,
@@ -155,7 +160,7 @@ const styles = StyleSheet.create({
     },
     labelStyle: {
         flex: 1,
-        color: 'black',
+        color: 'white',
         textAlignVertical: 'center',
         marginRight: 10,
         paddingTop: 10,
@@ -165,7 +170,8 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         paddingRight: 15,
         borderWidth: 1,
-        borderColor: '#000',
+        borderColor: 'white',
+        color: 'white',
     },
     textViewStyle: {
         flex: 1,
@@ -174,24 +180,14 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         paddingRight: 15,
         borderWidth: 1,
-        borderColor: '#000',
+        borderColor: 'white',
+        color: 'white',
     },
     dropDownStyle: {
         flex: 1,
         top: 10,
         borderWidth: 1,
-        backgroundColor: 'white',
+        backgroundColor: 'black',
         borderColor: '#dadae8',
-    },
-    errorTextStyle: {
-        color: 'red',
-        textAlign: 'center',
-        fontSize: 14,
-    },
-    successTextStyle: {
-        color: 'white',
-        textAlign: 'center',
-        fontSize: 18,
-        padding: 30,
     },
 });

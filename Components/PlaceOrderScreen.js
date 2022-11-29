@@ -165,6 +165,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignSelf: 'stretch',
         alignContent: 'center',
+        backgroundColor: 'black',
 
     },
     buttonStyle: {
@@ -197,6 +198,7 @@ const styles = StyleSheet.create({
         paddingRight: 15,
         borderWidth: 1,
         borderColor: 'gray',
+        color: 'white',
     },
     mapStyle: {
         width: '100%',
