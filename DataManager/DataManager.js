@@ -44,7 +44,7 @@ export default class CommonDataManager {
         try {
             const key = 'orders' + this.getUserID();
             const existingProducts = await AsyncStorage.getItem(key);
-            console.warn(existingProducts);
+            // console.warn(existingProducts);
             let newProduct = JSON.parse(existingProducts);
             if (!newProduct) {
                 newProduct = []

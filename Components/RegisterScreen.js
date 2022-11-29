@@ -27,7 +27,7 @@ const RegisterScreen = ({ navigation }) => {
 
     const validateEmail = () => {
         const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        console.warn(userEmail);
+        // console.warn(userEmail);
         if (reg.test(userEmail) === true) {
             return true;
         } else {

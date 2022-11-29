@@ -19,7 +19,7 @@ const PaymentScreen = ({ navigation, route }) => {
     const params = route.params;
 
     const handleNext = () => {
-        console.warn(params);
+        // console.warn(params);
         if (!ccNumber) {
             alert('Please fill Credit Card Number');
             return;
