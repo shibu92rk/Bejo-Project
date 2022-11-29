@@ -24,7 +24,7 @@ const LoginScreen = ({ navigation }) => {
     const verifyUserData = async () => {
         try {
             const jsonValue = await AsyncStorage.getItem(userEmail);
-            console.warn(JSON.stringify(jsonValue));
+            // console.warn(JSON.stringify(jsonValue));
             if ((jsonValue) != null) {
                 const json = JSON.parse(jsonValue);
                 if (json.password == userPassword) {
