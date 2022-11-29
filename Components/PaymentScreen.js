@@ -50,7 +50,7 @@ const PaymentScreen = ({ navigation, route }) => {
         );
     }
     return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.mainBody}>
             <ScrollView
                 keyboardShouldPersistTaps="handled"
                 contentContainerStyle={{
@@ -115,6 +115,13 @@ const PaymentScreen = ({ navigation, route }) => {
 export default PaymentScreen;
 
 const styles = StyleSheet.create({
+    mainBody: {
+        flex: 1,
+        alignSelf: 'stretch',
+        justifyContent: 'center',
+        alignContent: 'center',
+        backgroundColor: 'black'
+    },
     SectionStyle: {
         flexDirection: 'row',
         height: 40,
@@ -129,6 +136,8 @@ const styles = StyleSheet.create({
         paddingRight: 15,
         borderWidth: 1,
         borderColor: '#000',
+        borderColor: 'gray',
+        color: 'white'
     },
     buttonStyle: {
         backgroundColor: '#007aff',

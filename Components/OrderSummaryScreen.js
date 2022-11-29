@@ -38,7 +38,7 @@ const OrderSummaryScreen = ({ route, navigation }) => {
     }
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.mainBody}>
             <ScrollView
                 keyboardShouldPersistTaps="handled"
                 contentContainerStyle={{
@@ -84,6 +84,13 @@ const OrderSummaryScreen = ({ route, navigation }) => {
 export default OrderSummaryScreen;
 
 const styles = StyleSheet.create({
+    mainBody: {
+        flex: 1,
+        alignSelf: 'stretch',
+        alignContent: 'center',
+        backgroundColor: 'black',
+
+    },
     SectionStyle: {
         flexDirection: 'row',
         height: 40,
@@ -110,7 +117,7 @@ const styles = StyleSheet.create({
     },
     labelStyle: {
         flex: 1,
-        color: 'black',
+        color: 'white',
         textAlignVertical: 'center',
         marginRight: 10,
         paddingTop: 10,
