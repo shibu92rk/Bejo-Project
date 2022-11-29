@@ -38,9 +38,8 @@ const ProfileScreen = ({ navigation }) => {
                 };
                 const jsonValue = JSON.stringify(userData);
                 await AsyncStorage.setItem(user.email, jsonValue);
-                const data = await AsyncStorage.getItem(user.email);
-                commonData.setUser(data);
-
+                commonData.setUser(userData);
+                setUser(userData);
             }
             setIsEditing(!isEditing);
         } catch (e) {
@@ -48,32 +47,6 @@ const ProfileScreen = ({ navigation }) => {
         }
 
     };
-
-    const storeUserData = async () => {
-        const userData = {
-            userId: user.userId,
-            email: userEmail,
-            password: userPassword,
-            userName: userName,
-            userAddress: userAddress,
-            userAge: userAge
-        };
-        try {
-            const jsonValue = JSON.stringify(userData);
-            console.warn('User data:' + jsonValue);
-            await AsyncStorage.setItem(user.email, jsonValue);
-            Alert.alert(
-                "User Profile Updated.",
-                "User profile updated successfully.",
-                [{
-                    text: "OK",
-                    onPress: () => { }
-                }]
-            );
-        } catch (e) {
-            console.warn('exception: ' + e);
-        }
-    }
 
     return (
         <View style={styles.mainBody}>
@@ -93,7 +66,7 @@ const ProfileScreen = ({ navigation }) => {
                                     onChangeText={(userName) =>
                                         setUserName(userName)
                                     }
-                                    placeholder={user.userName}
+                                    defaultValue={user.userName}
                                     placeholderTextColor='white'
                                     returnKeyType="next"
                                     onSubmitEditing={Keyboard.dismiss}
@@ -114,13 +87,13 @@ const ProfileScreen = ({ navigation }) => {
                                     onChangeText={(age) =>
                                         setUserAge(age)
                                     }
-                                    placeholder={user.age}
+                                    defaultValue={user.userAge}
                                     placeholderTextColor='white'
                                     returnKeyType="next"
                                     onSubmitEditing={Keyboard.dismiss}
                                     blurOnSubmit={false}
                                 />
-                                : <Text style={styles.labelStyle}>{user.age}</Text>}
+                                : <Text style={styles.labelStyle}>{user.userAge}</Text>}
                     </View>
                     <View style={styles.SectionStyle}>
                         <Text style={styles.labelStyle}>Address</Text>
@@ -131,7 +104,7 @@ const ProfileScreen = ({ navigation }) => {
                                     onChangeText={(address) =>
                                         setUserAddress(address)
                                     }
-                                    placeholder={user.userAddress}
+                                    defaultValue={user.userAddress}
                                     placeholderTextColor='white'
                                     returnKeyType="next"
                                     onSubmitEditing={Keyboard.dismiss}
