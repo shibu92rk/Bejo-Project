@@ -125,7 +125,7 @@ export default PacakgeDetailsScreen;
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: 'black',
+        backgroundColor: '#2f2f2f',
     },
     SectionRowStyle: {
         flexDirection: 'row',
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
         flex: 1,
         top: 10,
         borderWidth: 1,
-        backgroundColor: 'black',
+        backgroundColor: '#2f2f2f',
         borderColor: '#dadae8',
     },
 });

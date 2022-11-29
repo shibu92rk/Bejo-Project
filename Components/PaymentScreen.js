@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch',
         justifyContent: 'center',
         alignContent: 'center',
-        backgroundColor: 'black'
+        backgroundColor: '#2f2f2f'
     },
     SectionStyle: {
         flexDirection: 'row',

@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignSelf: 'stretch',
         alignContent: 'center',
-        backgroundColor: 'black',
+        backgroundColor: '#2f2f2f',
 
     },
     SectionStyle: {

@@ -207,7 +207,7 @@ export default RegisterScreen;
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: 'black',
+        backgroundColor: '#2f2f2f',
     },
     SectionStyle: {
         flexDirection: 'row',
