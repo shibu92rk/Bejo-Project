@@ -17,6 +17,7 @@ const PacakgeDetailsScreen = ({ route, navigation }) => {
     const [rPhNo, setRPhNo] = useState(null);
     const [instructions, setInstructions] = useState(null);
     const [size, setSize] = useState(null);
+    const [deliveryFees, setDeliveryFees] = useState(0);
 
     const params = route.params;
 
@@ -40,6 +41,7 @@ const PacakgeDetailsScreen = ({ route, navigation }) => {
                 phone: rPhNo,
                 instructions: instructions,
                 type: size,
+                deliveryFees: deliveryFees,
                 ...params
             },
 
@@ -50,6 +52,21 @@ const PacakgeDetailsScreen = ({ route, navigation }) => {
         { label: 'Medium (5lb)' },
         { label: 'Large (10lb)' }
     ];
+
+    const calculateDeliveryFee = (size) => {
+        switch (size) {
+            case 'Small (2lb)':
+                setDeliveryFees(10 * 2);
+                break;
+            case 'Medium (5lb)':
+                setDeliveryFees(10 * 5);
+                break;
+            case 'Large (10lb)':
+                setDeliveryFees(10 * 10);
+                break;
+        }
+        setSize(size);
+    }
 
     return (
         <View style={styles.mainContainer}>
@@ -92,7 +109,7 @@ const PacakgeDetailsScreen = ({ route, navigation }) => {
                         <RadioButtonRN
                             data={data}
                             boxActiveBgColor="white"
-                            selectedBtn={(e) => setSize(e.label)
+                            selectedBtn={(e) => calculateDeliveryFee(e.label)
                             }
                         />
                     </View>

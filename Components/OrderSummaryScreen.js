@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     StyleSheet,
     View,
@@ -16,7 +16,7 @@ const OrderSummaryScreen = ({ route, navigation }) => {
     const handlePlaceOrder = async () => {
         try {
             let commonData = CommonDataManager.getInstance();
-            let result = await commonData.setUserOrdersToStorage(params);
+            let result = await commonData.setUserOrdersToStorage();
             if (result) {
                 Alert.alert(
                     "Order Placed",
@@ -65,6 +65,10 @@ const OrderSummaryScreen = ({ route, navigation }) => {
                     <View style={styles.SectionStyle}>
                         <Text style={styles.labelStyle}>Package Type</Text>
                         <Text style={styles.labelStyle}>{params.type}</Text>
+                    </View>
+                    <View style={styles.SectionStyle}>
+                        <Text style={styles.labelStyle}>Delivery Fee</Text>
+                        <Text style={styles.labelStyle}>{params.deliveryFees}</Text>
                     </View>
                     <View style={styles.SectionStyle}>
                         <Text style={styles.labelStyle}>Instructions</Text>
